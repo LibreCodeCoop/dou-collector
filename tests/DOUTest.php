@@ -45,36 +45,8 @@ class DOUTest extends TestCase
 
     public function testCollectDataReturnValidData()
     {
-        $list = <<<HTML
-            <script id="params">
-            {
-                "jsonArray":[
-                    {
-                        "artType": "Aviso de Licitação-Pregão",
-                        "urlTitle": "aviso-de-licitacao-pregao-eletronico-n-85/2019-44684646"
-                    },
-                    {
-                        "artType": "Aviso de Licitação-Pregão",
-                        "urlTitle": "aviso-de-licitacao-pregao-eletronico-n-86/2019-849894"
-                    }
-                ]
-            }
-            </script>
-            HTML;
-        $detail = <<<HTML
-            <a href="http://url.com/?data=11/12/2019&jornal=530&pagina=1" ></a>
-            <span class="edicao-dou-data">7</span>
-            <span class="publicado-dou-data">10/01/2020</span>
-            <div class="texto-dou">
-                <p class="identifica">AVISO DE LICITAÇÃO PREGÃO ELETRÔNICO Nº 85/2019</p>
-                <p class="dou-paragraph" >PROCESSO: 15845/2019. OBJETO: Contratação</p>
-                <p class="assina">JOHN DOE</p>
-                <p class="cargo">Pregoeiro</p>
-                <div class="informacao-conteudo-dou">
-                    <p>Este conteúdo não substitui o publicado na versão certificada.</p>
-                </div>
-            </div>
-            HTML;
+        $list = file_get_contents(__DIR__.'/Fixtures/list.html');
+        $detail = file_get_contents(__DIR__.'/Fixtures/detail.html');
         $this->DOU->client = new HttpBrowser(new MockHttpClient([
             new MockResponse($list),
             new MockResponse($detail)
