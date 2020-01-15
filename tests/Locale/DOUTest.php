@@ -16,7 +16,7 @@ class DOUTest extends TestCase
     {
         $this->DOU = new DOU([
             'baseUrl' => 'http://localhost',
-            'maxRequests' => 0
+            'maxRequests' => 1
         ]);
     }
     public function testCollectDataReturnArray()
@@ -48,14 +48,21 @@ class DOUTest extends TestCase
         $list = <<<HTML
             <script id="params">
             {
-                "jsonArray":[{
-                    "artType": "Aviso de Licitação-Pregão",
-                    "urlTitle": "aviso-de-licitacao-pregao-eletronico-n-85/2019-44684646"
-                }]
+                "jsonArray":[
+                    {
+                        "artType": "Aviso de Licitação-Pregão",
+                        "urlTitle": "aviso-de-licitacao-pregao-eletronico-n-85/2019-44684646"
+                    },
+                    {
+                        "artType": "Aviso de Licitação-Pregão",
+                        "urlTitle": "aviso-de-licitacao-pregao-eletronico-n-86/2019-849894"
+                    }
+                ]
             }
             </script>
             HTML;
         $detail = <<<HTML
+            <a href="http://url.com/?data=11/12/2019&jornal=530&pagina=1" ></a>
             <span class="edicao-dou-data">7</span>
             <span class="publicado-dou-data">10/01/2020</span>
             <div class="texto-dou">

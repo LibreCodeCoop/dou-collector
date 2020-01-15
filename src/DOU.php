@@ -74,16 +74,10 @@ class DOU
     private function populateDetails(\stdClass $data): \stdClass
     {
         $crawler = $this->client->request('GET', $this->baseUrl . '/web/dou/-/' . $data->urlTitle);// 11-12-2019
-        $a = $crawler->filter('.botao-materia a');
-        if ($a->count()) {
-            $href = $a->attr('href');
-            if ($href) {
-                $urlParsed = parse_url($href);
-                if ($urlParsed) {
-                    parse_str($urlParsed['query'], $query);
-                    $data->jornal = $query['jornal'];
-                }
-            }
+        $html = $crawler->html();
+        preg_match('/jornal=(?P<jornal>\d+)/', $html, $matches);
+        if ($matches) {
+            $data->jornal = $matches['jornal'];
         }
 
         $this->populateElement($crawler, $data, '.publicado-dou-data');
