@@ -5,6 +5,7 @@
     "keywords": ["webscraping", "symfony", "DOU"],
     "license": "MIT",
     "require": {
+        "php": ">=7.1",
         "symfony/browser-kit": "^5.0",
         "symfony/css-selector": "^4.3",
         "symfony/http-client": "^4.3"
@@ -14,7 +15,8 @@
         "vlucas/phpdotenv": "^4.1",
         "satooshi/php-coveralls": "^2.2",
         "squizlabs/php_codesniffer": "^3.5",
-        "phpstan/phpstan": "^0.12.5"
+        "phpstan/phpstan": "^0.12.5",
+        "phpcompatibility/php-compatibility": "^9.3"
     },
     "autoload": {
         "psr-4": {
@@ -22,7 +24,10 @@
         }
     },
     "scripts" : {
+        "post-install-cmd": "phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility",
+        "post-update-cmd" : "phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility",
         "phpcs" : "phpcs --standard=PSR2 -n src",
+        "compatibility": "phpcs --standard=PHPCompatibility --runtime-set testVersion 7.1 src",
         "phpcbf" : "phpcbf --standard=PSR2 -n src",
         "unit" : "phpunit --coverage-clover ./tests/log/clover.xml --colors=always",
         "unit-html" : "php -d phar.readonly=0 vendor/bin/phpunit --coverage-html ./tests/log/ --colors=always",
