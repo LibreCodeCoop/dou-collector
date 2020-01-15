@@ -20,7 +20,7 @@ class DOU
         $this->client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36');
 
         $crawler = $this->client->request('GET', $this->baseUrl . '/leiturajornal?secao=do3&data=' . $date);// 11-12-2019
-        
+
         $json = $crawler->filter('#params');
         if (!$json->count()) {
             return ['list' => []];
@@ -56,7 +56,13 @@ class DOU
     private function populateDetails(\stdClass $data)
     {
         $crawler = $this->client->request('GET', $this->baseUrl . '/web/dou/-/' . $data->urlTitle);// 11-12-2019
+        $a = $crawler->filter('.botao-materia a');
+        if ($a->count()) {
+            parse_str(parse_url($a->attr('href'))['query'], $query);
+            $data->jornal = $query['jornal'];
+        }
 
+        $this->populateElement($crawler, $data, '.publicado-dou-data');
         $this->populateElement($crawler, $data, '.edicao-dou-data');
         $this->populateElement($crawler, $data, '.identifica');
         $this->populateElement($crawler, $data, '.dou-paragraph');

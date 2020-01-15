@@ -57,6 +57,7 @@ class DOUTest extends TestCase
             HTML;
         $detail = <<<HTML
             <span class="edicao-dou-data">7</span>
+            <span class="publicado-dou-data">10/01/2020</span>
             <div class="texto-dou">
                 <p class="identifica">AVISO DE LICITAÇÃO PREGÃO ELETRÔNICO Nº 85/2019</p>
                 <p class="dou-paragraph" >PROCESSO: 15845/2019. OBJETO: Contratação</p>
@@ -74,6 +75,7 @@ class DOUTest extends TestCase
         $list = $this->DOU->collectData('2020-01-29', ['aviso de licita'])['list'];
         $this->assertNotEmpty($list);
 
+        $this->assertObjectHasAttribute('publicado_dou_data', $list[0]);
         $this->assertObjectHasAttribute('edicao_dou_data', $list[0]);
         $this->assertObjectHasAttribute('identifica', $list[0]);
         $this->assertObjectHasAttribute('dou_paragraph', $list[0]);
@@ -83,6 +85,7 @@ class DOUTest extends TestCase
         $this->assertObjectHasAttribute('texto_dou', $list[0]);
 
         $this->assertEquals('7', $list[0]->edicao_dou_data);
+        $this->assertEquals('10/01/2020', $list[0]->publicado_dou_data);
         $this->assertIsInt(strpos($list[0]->identifica, 'AVISO'));
         $this->assertIsInt(strpos($list[0]->dou_paragraph, 'PROCESSO'));
         $this->assertIsInt(strpos($list[0]->assina, 'JOHN'));
