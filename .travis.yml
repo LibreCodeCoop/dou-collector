@@ -9,7 +9,7 @@ before_script:
   - composer install --prefer-source --no-interaction --dev
 
 script:
-  - vendor/bin/phpunit
+  - composer test
 
 after_success:
     - php vendor/bin/php-coveralls --verbose
