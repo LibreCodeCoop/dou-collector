@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/LyseonTech/dou-collector.svg?branch=master)](https://travis-ci.org/LyseonTech/dou-collector)
+[![Coverage Status](https://coveralls.io/repos/github/LyseonTech/dou-collector/badge.svg?branch=master)](https://coveralls.io/github/LyseonTech/dou-collector?branch=master)
+[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-blue.svg)](https://php.net/)
+
 # Coletor de dados
 
 Colete dados do DOU
