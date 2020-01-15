@@ -2,7 +2,8 @@
     "require": {
         "symfony/browser-kit": "^5.0",
 		"symfony/css-selector": "^4.3",
-		"symfony/http-client": "^4.3"
+		"symfony/http-client": "^4.3",
+        "vlucas/phpdotenv": "^4.1"
     },
     "autoload": {
         "psr-4": {
