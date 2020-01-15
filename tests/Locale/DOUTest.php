@@ -1,6 +1,6 @@
 <?php
 
-use Locale\DOU;
+use DouCollector\DOU;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\HttpClient\MockHttpClient;

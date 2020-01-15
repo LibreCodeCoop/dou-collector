@@ -1,8 +1,8 @@
 <?php
 
-use Locale\DOU;
+use DouCollector\DOU;
 
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 if (file_exists('.env')) {
     $dotenv = Dotenv\Dotenv::createMutable(__DIR__);
