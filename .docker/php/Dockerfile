@@ -12,14 +12,19 @@ RUN apt-get install -y \
 RUN pecl install xdebug-2.9.0 \
     && docker-php-ext-enable xdebug
 
-### BAIXA O COMPOSER 
+RUN git clone https://github.com/nikic/php-ast.git \
+    && cd php-ast \
+    && phpize \
+    && ./configure \
+    && make install \
+    && echo 'extension=ast.so' > /usr/local/etc/php/php.ini \
+    && cd .. && rm -rf php-ast
+
 RUN curl https://getcomposer.org/composer.phar --output /usr/bin/composer
-# DÁ A PERMISSÃO PARA TODOS EXECUTAREM PARA TUDO QUE ESTÁ DENTRO DA PASTA COMPOSER
 RUN chmod +x /usr/bin/composer
 
 WORKDIR /app
 
-## COPIA ARQUIVO entrypoint.sh PARA DIRETÓRIOS
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
 ENTRYPOINT [ "sh", "/usr/bin/entrypoint.sh" ]

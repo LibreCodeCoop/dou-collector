@@ -5,17 +5,28 @@ use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
+/**
+ * Coletor de dados do DOU
+ *
+ * @see README.md
+ */
 class DOU
 {
     /**
+     * Cliente que fará as requisições
+     *
      * @var HttpBrowser
      */
     public $client;
     /**
+     * URL base para as requisições
+     *
      * @var string
      */
     private $baseUrl;
     /**
+     * Máximo de requisições que serão feitas, se 0 fará quantas for necessário
+     *
      * @var integer
      */
     private $maxRequests = 0;
@@ -47,7 +58,7 @@ class DOU
         }
         $json = $json->text();
         $obj = json_decode($json);
-        
+
         $licitacoes = [];
         $requestCount = 0;
         if (!empty($obj->jsonArray)) {
@@ -71,6 +82,11 @@ class DOU
         return ['list' => $licitacoes];
     }
 
+    /**
+     * Coleta mais detalhes sobre a licitação a partir da página
+     *
+     * @param \stdClass $data
+     */
     private function populateDetails(\stdClass $data): \stdClass
     {
         $crawler = $this->client->request('GET', $this->baseUrl . '/web/dou/-/' . $data->urlTitle);// 11-12-2019
@@ -92,7 +108,15 @@ class DOU
         return $data;
     }
 
-    private function populateElement(Crawler $crawler, \stdClass &$data, string $selector): void
+    /**
+     * Pega um elemento a partir de um seletor css caso ele exista e cria em $data
+     * este elemento, usando o seletor como nome da propriedade
+     *
+     * @param Crawler $crawler
+     * @param \stdClass $data
+     * @param string $selector
+     */
+    private static function populateElement(Crawler $crawler, \stdClass &$data, string $selector): void
     {
         $elements = $crawler->filter($selector);
         if ($elements->count()) {
