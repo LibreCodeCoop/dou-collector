@@ -40,7 +40,7 @@ class DOUTest extends TestCase
         $this->DOU->client = new HttpBrowser(new MockHttpClient([
             new MockResponse('TEST')
         ]));
-        $this->assertEmpty($this->DOU->collectData('2020-01-30', [])['list']);        
+        $this->assertEmpty($this->DOU->collectData('2020-01-30', [])['list']);
     }
 
     public function testCollectDataReturnValidData()
