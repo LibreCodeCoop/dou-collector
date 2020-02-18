@@ -71,6 +71,9 @@ class DOU
                 if (isset($v->artType)) {
                     foreach ($monitoringKeys as $key) {
                         $exists = strpos(strtolower($v->artType), $key) !== false;
+                        if ($exists) {
+                            break;
+                        }
                     }
                 }
                 if ($this->maxRequests && $exists) {

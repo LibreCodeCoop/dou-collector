@@ -68,4 +68,30 @@ class DOUTest extends TestCase
         $this->assertIsInt(strpos($current->informacao_conteudo_dou, 'Este conteúdo'));
         $this->assertIsInt(strpos($current->texto_dou, 'class="informacao-conteudo-dou"'));
     }
+
+    public function testCollectMultipleKeys()
+    {
+        $this->DOU = new DOU([
+            'baseUrl' => 'http://localhost',
+            'maxRequests' => 2
+        ]);
+        $list = file_get_contents(__DIR__.'/Fixtures/list.html');
+        $detail = file_get_contents(__DIR__.'/Fixtures/detail.html');
+        $this->DOU->client = new HttpBrowser(new MockHttpClient([
+            new MockResponse($list),
+            new MockResponse($detail),
+            new MockResponse($list),
+            new MockResponse($detail),
+            new MockResponse($detail)
+        ]));
+        foreach($this->DOU->collectData('2020-01-29', ['aviso de licita']) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(1, $items);
+        $items = [];
+        foreach($this->DOU->collectData('2020-01-29', ['aviso de licita', 'aviso de cancelamento']) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(2, $items);
+    }
 }
