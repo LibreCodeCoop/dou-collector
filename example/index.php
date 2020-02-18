@@ -2,10 +2,10 @@
 
 use DouCollector\DOU;
 
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 if (file_exists('.env')) {
-    $dotenv = Dotenv\Dotenv::createMutable(__DIR__);
+    $dotenv = Dotenv\Dotenv::createMutable(getcwd());
     $dotenv->load();
 }
 
@@ -13,7 +13,10 @@ $DOU = new DOU([
     'baseUrl' => getenv('BASE_URL'),
     'maxRequests' => getenv('MAX_REQUESTS')
 ]);
-$licitacoes = $DOU->collectData($_GET['date'], $_GET['keys']);
+$keys = ['aviso de licita'];
+foreach ($DOU->collectData('30-12-2019', $keys) as $licitacao) {
+    $licitacoes[] = $licitacao;
+}
 
 header('Content-Type: application/json');
 

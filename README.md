@@ -27,7 +27,9 @@ $data = '30-12-2019';
 // Irá buscar no título da publicação
 $palavrasChave = ['edital'];
 
-$licitacoes = $DOU->collectData($data, $palavrasChave);
+foreach ($DOU->collectData($data, $palavrasChave) as $licitacao) {
+    $licitacoes[] = $licitacao;
+}
 ```
 
 > OBS: Este exemplo encontra-se implementado na pasta `example`

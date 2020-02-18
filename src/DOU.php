@@ -1,6 +1,7 @@
 <?php
 namespace DouCollector;
 
+use Generator;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
@@ -44,9 +45,9 @@ class DOU
      *
      * @param string $date Format d-m-Y
      * @param array{string} $monitoringKeys Array with search strings
-     * @return array{list:array} List containing sets of results
+     * @return Generator<\stdClass|null>
      */
-    public function collectData(string $date, array $monitoringKeys):array
+    public function collectData(string $date, array $monitoringKeys):Generator
     {
         $this->client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36');
 
@@ -54,7 +55,7 @@ class DOU
 
         $json = $crawler->filter('#params');
         if (!$json->count()) {
-            return ['list' => []];
+            return Generator::class;
         }
         $json = $json->text();
         $obj = json_decode($json);
@@ -77,9 +78,11 @@ class DOU
                 }
                 return $exists;
             });
-            array_walk($licitacoes, [$this, 'populateDetails']);
+            foreach ($licitacoes as $pos => $licitacao) {
+                $licitacoes[$pos] = $this->populateDetails($licitacao);
+                yield $licitacoes[$pos];
+            }
         }
-        return ['list' => $licitacoes];
     }
 
     /**

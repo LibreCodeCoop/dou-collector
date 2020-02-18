@@ -19,20 +19,13 @@ class DOUTest extends TestCase
             'maxRequests' => 1
         ]);
     }
-    public function testCollectDataReturnArray()
+    public function testCollectDataReturnGenerator()
     {
         $this->DOU->client = new HttpBrowser(new MockHttpClient([
             new MockResponse('TEST')
         ]));
-        $this->assertIsArray($this->DOU->collectData('', []));
-    }
-
-    public function testCollectDataReturnArrayList()
-    {
-        $this->DOU->client = new HttpBrowser(new MockHttpClient([
-            new MockResponse('TEST')
-        ]));
-        $this->assertArrayHasKey('list', $this->DOU->collectData('', []));
+        $actual = $this->DOU->collectData('', []);
+        $this->assertInstanceOf(Generator::class, $actual);
     }
 
     public function testCollectDataReturnEmptyListWhenDateIsInvalid()
@@ -40,7 +33,10 @@ class DOUTest extends TestCase
         $this->DOU->client = new HttpBrowser(new MockHttpClient([
             new MockResponse('TEST')
         ]));
-        $this->assertEmpty($this->DOU->collectData('2020-01-30', [])['list']);
+        $actual = $this->DOU->collectData('2020-01-30', []);
+        $actual = $this->DOU->collectData('', []);
+        $data = $actual->current();
+        $this->assertNull($data);
     }
 
     public function testCollectDataReturnValidData()
@@ -51,25 +47,25 @@ class DOUTest extends TestCase
             new MockResponse($list),
             new MockResponse($detail)
         ]));
-        $list = $this->DOU->collectData('2020-01-29', ['aviso de licita'])['list'];
-        $this->assertNotEmpty($list);
+        $current = $this->DOU->collectData('2020-01-29', ['aviso de licita'])->current();
+        $this->assertIsObject($current);
 
-        $this->assertObjectHasAttribute('publicado_dou_data', $list[0]);
-        $this->assertObjectHasAttribute('edicao_dou_data', $list[0]);
-        $this->assertObjectHasAttribute('identifica', $list[0]);
-        $this->assertObjectHasAttribute('dou_paragraph', $list[0]);
-        $this->assertObjectHasAttribute('assina', $list[0]);
-        $this->assertObjectHasAttribute('cargo', $list[0]);
-        $this->assertObjectHasAttribute('informacao_conteudo_dou', $list[0]);
-        $this->assertObjectHasAttribute('texto_dou', $list[0]);
+        $this->assertObjectHasAttribute('publicado_dou_data', $current);
+        $this->assertObjectHasAttribute('edicao_dou_data', $current);
+        $this->assertObjectHasAttribute('identifica', $current);
+        $this->assertObjectHasAttribute('dou_paragraph', $current);
+        $this->assertObjectHasAttribute('assina', $current);
+        $this->assertObjectHasAttribute('cargo', $current);
+        $this->assertObjectHasAttribute('informacao_conteudo_dou', $current);
+        $this->assertObjectHasAttribute('texto_dou', $current);
 
-        $this->assertEquals('7', $list[0]->edicao_dou_data);
-        $this->assertEquals('10/01/2020', $list[0]->publicado_dou_data);
-        $this->assertIsInt(strpos($list[0]->identifica, 'AVISO'));
-        $this->assertIsInt(strpos($list[0]->dou_paragraph, 'PROCESSO'));
-        $this->assertIsInt(strpos($list[0]->assina, 'JOHN'));
-        $this->assertIsInt(strpos($list[0]->cargo, 'Pregoeiro'));
-        $this->assertIsInt(strpos($list[0]->informacao_conteudo_dou, 'Este conteúdo'));
-        $this->assertIsInt(strpos($list[0]->texto_dou, 'class="informacao-conteudo-dou"'));
+        $this->assertEquals('7', $current->edicao_dou_data);
+        $this->assertEquals('10/01/2020', $current->publicado_dou_data);
+        $this->assertIsInt(strpos($current->identifica, 'AVISO'));
+        $this->assertIsInt(strpos($current->dou_paragraph, 'PROCESSO'));
+        $this->assertIsInt(strpos($current->assina, 'JOHN'));
+        $this->assertIsInt(strpos($current->cargo, 'Pregoeiro'));
+        $this->assertIsInt(strpos($current->informacao_conteudo_dou, 'Este conteúdo'));
+        $this->assertIsInt(strpos($current->texto_dou, 'class="informacao-conteudo-dou"'));
     }
 }
