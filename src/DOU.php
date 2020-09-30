@@ -36,9 +36,9 @@ class DOU
      */
     public function __construct(array $settings)
     {
-        $this->baseUrl = $settings['baseUrl'];
+        $this->baseUrl = $settings['baseUrl'] ?? 'https://www.in.gov.br';
         $this->maxRequests = $settings['maxRequests'];
-        $this->client = new HttpBrowser(HttpClient::create());
+        $this->client = new HttpBrowser(HttpClient::create(['verify_peer' => false]));
     }
     /**
      * Search by date using a list of search strings
