@@ -5,7 +5,7 @@
 
 # Coletor de dados
 
-Colete dados do DOU
+Colete dados do DOU - Diário Oficial da União
 
 ## Composer
 
