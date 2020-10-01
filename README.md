@@ -17,7 +17,6 @@ Exemplo de uso:
 
 ```php
 $DOU = new DouCollector\DOU([
-    'baseUrl' => 'http://www.baseurldosite.com.br',
     // Caso não queira colocar um limit, passe zero
     'maxRequests' => 0
 ]);
@@ -25,7 +24,7 @@ $DOU = new DouCollector\DOU([
 // Data para a busca
 $data = '30-12-2019';
 // Irá buscar no título da publicação
-$palavrasChave = ['edital'];
+$palavrasChave = ['aviso de licita'];
 
 foreach ($DOU->collectData($data, $palavrasChave) as $licitacao) {
     $licitacoes[] = $licitacao;
