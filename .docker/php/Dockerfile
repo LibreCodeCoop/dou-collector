@@ -1,15 +1,18 @@
-FROM php:7.4-fpm
+FROM php:7.4-fpm-alpine
 
-RUN apt-get update
+RUN apk update
 
-RUN apt-get install -y \
+RUN apk add \
+        autoconf \
+        g++ \
         git \
         libzip-dev \
+        make \
         unzip \
         && docker-php-ext-install zip
 
 # Install xdebug
-RUN pecl install xdebug-2.9.0 \
+RUN pecl install xdebug-2.9.8 \
     && docker-php-ext-enable xdebug
 
 RUN git clone https://github.com/nikic/php-ast.git \
