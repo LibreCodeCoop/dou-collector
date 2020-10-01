@@ -8,9 +8,8 @@ if (file_exists('.env')) {
     $dotenv = Dotenv\Dotenv::createMutable(getcwd());
     $dotenv->load();
 }
-
 $DOU = new DOU([
-    'maxRequests' => getenv('MAX_REQUESTS')
+    'maxRequests' => $_ENV['MAX_REQUESTS']
 ]);
 $keys = ['aviso de licita'];
 foreach ($DOU->collectData('30-12-2019', $keys) as $licitacao) {
