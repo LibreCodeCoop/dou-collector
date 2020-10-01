@@ -5,7 +5,7 @@
     "keywords": ["webscraping", "symfony", "DOU"],
     "license": "MIT",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "symfony/browser-kit": "^5.1",
         "symfony/css-selector": "^5.1",
         "symfony/http-client": "^5.1"
