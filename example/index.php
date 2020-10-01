@@ -10,7 +10,6 @@ if (file_exists('.env')) {
 }
 
 $DOU = new DOU([
-    'baseUrl' => getenv('BASE_URL'),
     'maxRequests' => getenv('MAX_REQUESTS')
 ]);
 $keys = ['aviso de licita'];
