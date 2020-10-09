@@ -1,4 +1,5 @@
 <?php
+
 namespace DouCollector;
 
 use Generator;
@@ -47,7 +48,7 @@ class DOU
      * @param array{string} $monitoringKeys Array with search strings
      * @return Generator<\stdClass|null>
      */
-    public function collectData(string $date, array $monitoringKeys):Generator
+    public function collectData(string $date, array $monitoringKeys): Generator
     {
         $this->client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36');
 
@@ -134,7 +135,7 @@ class DOU
                 $data->{$property} = '';
                 foreach ($children as $child) {
                     if ($node->ownerDocument) {
-                        $data->{$property}.= $node->ownerDocument->saveHTML($child);
+                        $data->{$property} .= $node->ownerDocument->saveHTML($child);
                     }
                 }
             }
