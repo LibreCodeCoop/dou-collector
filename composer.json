@@ -25,8 +25,8 @@
         }
     },
     "scripts" : {
-        "phpcs" : "phpcs --standard=PSR2 -n src",
-        "phpcbf" : "phpcbf --standard=PSR2 -n src",
+        "phpcs" : "phpcs --standard=PSR12 -n src",
+        "phpcbf" : "phpcbf --standard=PSR12 -n src",
         "unit" : "phpunit --coverage-clover ./tests/log/clover.xml --colors=always",
         "unit-html" : "phpunit --coverage-html ./tests/log/ --colors=always",
         "phpstan" : "phpstan analyse src --level 7",
