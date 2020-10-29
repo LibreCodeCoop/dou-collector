@@ -13,7 +13,7 @@ class ExportCommand extends Command
 {
     const FORMAT_WHITELIST = ["json", "xml"];
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('export')
@@ -48,8 +48,8 @@ class ExportCommand extends Command
     {
         $date = $input->getOption('date');
         $keywords = explode(",", $input->getOption('keywords'));
-        $format = $input->getOption('format') or $format = 'json';
-        $maxRequests = $input->getOption('maxRequests') or $maxRequests = 3;
+        $format = $input->getOption('format') ?? 'json';
+        $maxRequests = $input->getOption('maxRequests') ?? 3;
 
         if (!$date) {
             $output->writeln('A opção "date" é obrigatória.');
