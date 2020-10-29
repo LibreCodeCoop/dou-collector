@@ -76,22 +76,35 @@ class ExportCommand extends Command
             $results[] = $result;
         }
         
-        $json = json_encode($results);
-
+        
         if ($format == 'json') {
+            $json = $this->toJSON($results);
             $output->writeln($json);
-            return Command::SUCCESS;
         }
         
         if ($format == 'xml') {
-            $array = json_decode($json, true);
-            $arrayWithValidKey = [];
-            foreach ($array as $item) {
-                $arrayWithValidKey[$item['urlTitle']] = $item;
-            }
-            $xml = ArrayToXml::convert($arrayWithValidKey, 'results');
+            $xml = $this->toXML($results);
             $output->writeln($xml);
-            return Command::SUCCESS;
         }
+
+        return Command::SUCCESS;
+    }
+
+    private function toJSON (array $results)
+    {
+        $json = json_encode($results);
+        return $json;
+    }
+
+    private function toXML (array $results)
+    {
+        $json = json_encode($results);
+        $array = json_decode($json, true);
+        $arrayWithValidKey = [];
+        foreach ($array as $item) {
+            $arrayWithValidKey[$item['urlTitle']] = $item;
+        }
+        $xml = ArrayToXml::convert($arrayWithValidKey, 'results');
+        return $xml;
     }
 }
