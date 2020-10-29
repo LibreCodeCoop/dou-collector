@@ -8,7 +8,9 @@
         "php": ">=7.3",
         "symfony/browser-kit": "^5.1",
         "symfony/css-selector": "^5.1",
-        "symfony/http-client": "^5.1"
+        "symfony/http-client": "^5.1",
+        "symfony/console": "^5.1",
+        "spatie/array-to-xml": "^2.14"
     },
     "require-dev": {
         "ext-ast": "*",
