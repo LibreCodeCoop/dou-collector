@@ -25,7 +25,8 @@ return [
         'vendor/symfony/browser-kit',
         'vendor/symfony/console',
         'vendor/symfony/dom-crawler',
-        'vendor/symfony/http-client'
+        'vendor/symfony/http-client',
+        'vendor/spatie/array-to-xml'
     ],
 
     // A directory list that defines files that will be excluded
