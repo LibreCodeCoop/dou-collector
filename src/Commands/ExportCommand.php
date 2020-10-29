@@ -9,6 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use DouCollector\DOU;
 use Spatie\ArrayToXml\ArrayToXml;
 
+/**
+ * Comando para exportar em JSON ou XML via linha de comando
+ */
 class ExportCommand extends Command
 {
     const FORMAT_WHITELIST = ["json", "xml"];
@@ -46,19 +49,21 @@ class ExportCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $date = $input->getOption('date');
-        $keywords = explode(",", $input->getOption('keywords'));
-        $format = $input->getOption('format') ?? 'json';
-        $maxRequests = $input->getOption('maxRequests') ?? 3;
+        $results = [];
+        $options = $input->getOptions();
+        $date = $options['date'];
+        $keywords = explode(",", $options['keywords']);
+        $format = $options['format'] ?? 'json';
+        $maxRequests = $options['maxRequests'] ?? 3;
 
         if (!$date) {
             $output->writeln('A opção "date" é obrigatória.');
-            return Command::FAILURE;            
+            return Command::FAILURE;
         }
-        
+
         if (empty($keywords) || $keywords[0] == "") {
             $output->writeln('A opção "keywords" é obrigatória.');
-            return Command::FAILURE;            
+            return Command::FAILURE;
         }
 
         if (!in_array($format, self::FORMAT_WHITELIST)) {
@@ -70,35 +75,43 @@ class ExportCommand extends Command
         }
 
         $DOU = new DOU([
+            'baseUrl' => 'https://www.in.gov.br',
             'maxRequests' => $maxRequests
         ]);
         foreach ($DOU->collectData($date, $keywords) as $result) {
             $results[] = $result;
         }
-        
-        
-        if ($format == 'json') {
-            $json = $this->toJSON($results);
-            $output->writeln($json);
-        }
-        
-        if ($format == 'xml') {
-            $xml = $this->toXML($results);
-            $output->writeln($xml);
-        }
 
+        $formattedResult = self::{'to' . strtoupper($format)}($results);
+
+        $output->writeln($formattedResult);
         return Command::SUCCESS;
     }
 
-    private function toJSON (array $results)
+    /**
+     * Converte array em JSON
+     *
+     * @param array<string> $results
+     * @return string|false
+     */
+    private static function toJSON(array $results)
     {
         $json = json_encode($results);
         return $json;
     }
 
-    private function toXML (array $results)
+    /**
+     * Converte array em XML
+     *
+     * @param array<string> $results
+     */
+    private static function toXML(array $results): string
     {
         $json = json_encode($results);
+        if (empty($json)) {
+            return "";
+        }
+
         $array = json_decode($json, true);
         $arrayWithValidKey = [];
         foreach ($array as $item) {

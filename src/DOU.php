@@ -45,7 +45,7 @@ class DOU
      * Search by date using a list of search strings
      *
      * @param string $date Format d-m-Y
-     * @param array{string} $monitoringKeys Array with search strings
+     * @param array<int, string> $monitoringKeys Array with search strings
      * @return Generator<\stdClass|null>
      */
     public function collectData(string $date, array $monitoringKeys): Generator
