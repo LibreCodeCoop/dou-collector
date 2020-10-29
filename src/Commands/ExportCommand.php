@@ -57,19 +57,21 @@ class ExportCommand extends Command
         $maxRequests = $options['maxRequests'] ?? 3;
 
         if (!$date) {
-            $output->writeln('A opção "date" é obrigatória.');
+            $output->writeln('<error>A opção "date" é obrigatória.</error>');
             return Command::FAILURE;
         }
 
         if (empty($keywords) || $keywords[0] == "") {
-            $output->writeln('A opção "keywords" é obrigatória.');
+            $output->writeln('<error>A opção "keywords" é obrigatória.</error>');
             return Command::FAILURE;
         }
 
         if (!in_array($format, self::FORMAT_WHITELIST)) {
             $output->writeln([
-                "Formato \"{$format}\" é inválido!",
-                'Os formatos válidos são: ' . implode(", ", self::FORMAT_WHITELIST)
+                "<error>Formato \"{$format}\" é inválido!</error>",
+                'Os formatos válidos são: <comment>' .
+                implode(", ", self::FORMAT_WHITELIST) .
+                '</comment>'
             ]);
             return Command::FAILURE;
         }
@@ -107,12 +109,13 @@ class ExportCommand extends Command
      */
     private static function toXML(array $results): string
     {
-        $json = json_encode($results);
-        if (empty($json)) {
+        if (empty($results)) {
             return "";
         }
 
-        $array = json_decode($json, true);
+        $json = json_encode($results);
+
+        $array = json_decode((string) $json, true);
         $arrayWithValidKey = [];
         foreach ($array as $item) {
             $arrayWithValidKey[$item['urlTitle']] = $item;
