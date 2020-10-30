@@ -3,11 +3,16 @@
 
 use Symfony\Component\Console\Application;
 use DouCollector\Commands\ExportCommand;
+use DouCollector\DOU;
 
 require 'vendor/autoload.php';
 
 $application = new Application();
 
-$application->add(new ExportCommand());
+$DOU = new DOU([
+  'baseUrl' => 'https://www.in.gov.br',
+  'maxRequests' => $maxRequests
+]);
+$application->add(new ExportCommand($DOU));
 
 $application->run();
