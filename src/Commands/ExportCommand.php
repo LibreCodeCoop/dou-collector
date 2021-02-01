@@ -14,7 +14,26 @@ use Spatie\ArrayToXml\ArrayToXml;
  */
 class ExportCommand extends Command
 {
-    const FORMAT_WHITELIST = ["json", "xml"];
+    /**
+     * Classe DOU
+     *
+     * @var DOU
+     */
+    private $DOU;
+
+    /**
+     * Lista de formatos válidos
+     *
+     * @var array<int, string>
+     */
+    private $formatWhitelist;
+
+    public function __construct(DOU $DOU)
+    {
+        parent::__construct();
+        $this->DOU = $DOU;
+        $this->formatWhitelist = ["json", "xml"];
+    }
 
     protected function configure(): void
     {
@@ -66,21 +85,17 @@ class ExportCommand extends Command
             return Command::FAILURE;
         }
 
-        if (!in_array($format, self::FORMAT_WHITELIST)) {
+        if (!in_array($format, $this->formatWhitelist)) {
             $output->writeln([
                 "<error>Formato \"{$format}\" é inválido!</error>",
                 'Os formatos válidos são: <comment>' .
-                implode(", ", self::FORMAT_WHITELIST) .
+                implode(", ", $this->formatWhitelist) .
                 '</comment>'
             ]);
             return Command::FAILURE;
         }
 
-        $DOU = new DOU([
-            'baseUrl' => 'https://www.in.gov.br',
-            'maxRequests' => $maxRequests
-        ]);
-        foreach ($DOU->collectData($date, $keywords) as $result) {
+        foreach ($this->DOU->collectData($date, $keywords) as $result) {
             $results[] = $result;
         }
 
@@ -109,11 +124,7 @@ class ExportCommand extends Command
      */
     private static function toXML(array $results): string
     {
-        if (empty($results)) {
-            return "";
-        }
-
-        $json = json_encode($results);
+        $json = json_encode((array) $results);
 
         $array = json_decode((string) $json, true);
         $arrayWithValidKey = [];
