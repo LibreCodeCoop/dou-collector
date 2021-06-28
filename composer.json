@@ -1,5 +1,5 @@
 {
-    "name": "lyseontech/dou-collector",
+    "name": "librecodecoop/dou-collector",
     "description": "Coletor de dados do DOU",
     "type": "library",
     "keywords": ["webscraping", "symfony", "DOU"],
